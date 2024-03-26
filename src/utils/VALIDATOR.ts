@@ -198,6 +198,19 @@ export const LENGTHVALIDATION = (value: number | string, max: number) => {
 
 };
 
+
+/**
+ * Mask email
+ */
+export const MASKEMAIL = (value: string) => {
+    const [name, domain] = value.split('@');
+    const { length: len } = name;
+    const maskedName = name[0] + '....' + name[len - 1];
+    const maskedEmail = maskedName + '@' + domain;
+    return maskedEmail;
+};
+
+
 export interface IVALIDATOR {
     customValidations: any;
     name(name: string): boolean;
@@ -219,6 +232,7 @@ export interface IVALIDATOR {
     };
     url(url: string): boolean;
     addCustomValidation(name: string, validation: (value: string) => boolean): void;
+    maskEmail(value: string): string;
 }
 /**
  * Validates emails, phone numbers, passwords, names, urls, etc
@@ -363,6 +377,14 @@ class VALIDATOR implements IVALIDATOR {
             }
             this.customValidations[name] = customValidation;
         }
+    }
+    /**
+     * Mask an email address
+     * @param value the email to mask
+     * @returns string
+     */
+    maskEmail(value: string): string {
+        return MASKEMAIL(value)
     }
     /**
      * Provides a way to validate a custom validation or a default validation
