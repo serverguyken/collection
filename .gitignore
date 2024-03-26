@@ -1,0 +1,11 @@
+/dist
+/utils
+/constants
+/interfaces
+/types
+/node_modules
+*.js
+*.js.map
+.env
+.env.development
+*.tgz 
