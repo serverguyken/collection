@@ -16,11 +16,11 @@ export interface IAPIResponse<T> {
 
 
 /**
- *  Check if the error is a Shopascart API response
+ *  A standard API response object that returns the CREATESTATUS and CREATERESPONSE reponse type
  * @param err -  The error to check
  * @returns 
  */
-export const ISSHOPASCARTRES = (err: any): { isValidResponse: boolean, error?: IAPIResponse<any> | any } => {
+export const ISAPIRES = (err: any): { isValidResponse: boolean, error?: IAPIResponse<any> | any } => {
     if (err.response?.data !== undefined) {
         if (err.response.data.status !== undefined) {
             return {
