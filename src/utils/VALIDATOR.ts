@@ -189,11 +189,21 @@ export const URLVALIDATION = (value: string) => {
 /**
  * Number length validation
  */
-export const LENGTHVALIDATION = (value: number | string, max: number) => {
-    if (value.toString().length !== max) {
-        return false;
+export const LENGTHVALIDATION = (value: number | string, max: number, type?: "greater-than" | "less-than") => {
+    if (type) {
+        if (type === "greater-than") {
+            return value.toString().length > max;
+        } else if (type === "less-than") {
+            return value.toString().length < max;
+        } else {
+            return false;
+        }
     } else {
-        return true;
+        if (value.toString().length !== max) {
+            return false;
+        } else {
+            return true;
+        }
     }
 
 };
@@ -222,7 +232,7 @@ export interface IVALIDATOR {
         reasons: string[];
     };
     phoneNumber(phoneNumber: string, max: number, countryCode?: string): boolean;
-    length(number: number | string, max: number): boolean;
+    length(number: number | string, max: number, type?: "greater-than" | "less-than"): boolean;
     password(password: string, min: number, max: number, strict: boolean): boolean;
     passwordWithMessage(password: string, min: number, max: number, strict: boolean): {
         valid: boolean;
@@ -342,14 +352,15 @@ class VALIDATOR implements IVALIDATOR {
      * Validates the length of a number or string
      * @param value - the value to validate
      * @param max - the maximum length of the number
+     * @param type - check if length is  "greater-than" | "less-than"
      * @returns true if the number is valid, false otherwise
      * @example
      * const validator = new VALIDATOR();
      * validator.length(123456, 6); // returns true
      * validator.length('123456', 5); // returns false
      */
-    length(value: number | string, max: number) {
-        return LENGTHVALIDATION(value, max);
+    length(value: number | string, max: number, type?: "greater-than" | "less-than") {
+        return LENGTHVALIDATION(value, max, type);
     }
 
     /**
