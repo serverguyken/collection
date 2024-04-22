@@ -59,6 +59,16 @@ export const STATUSCODES = {
     510: 'NOT_EXTENDED',
     511: 'NETWORK_AUTHENTICATION_REQUIRED'
 } as const;
+
+type TCreateStatus = {
+    code: keyof typeof STATUSCODES | number,
+    errInt: number,
+    message: string,
+    statusCode?: string,
+    timestamp?: string,
+    path?: string,
+    errors?: TResponseStatus['errors']
+}
 /**
  * Creates a response status object
  * @param code  The response code
@@ -69,10 +79,10 @@ export const STATUSCODES = {
  * @param path  The path of the request
  * @param errors  The errors that occurred
  */
-export const CREATESTATUS = (code: keyof typeof STATUSCODES | number, errInt: number, message: string, statusCode?: string, timestamp?: string, path?: string, errors?: TResponseStatus['errors']): TResponseStatus => {
+export function CREATESTATUS(code: keyof typeof STATUSCODES | number, errInt: number, message: string, statusCode?: string, timestamp?: string, path?: string, errors?: TResponseStatus['errors'], options?: TCreateStatus): TResponseStatus {
     const indication = errInt === 0 ? 'success' : 'failure';
-   
-    const GetStatusCode = (code: keyof typeof STATUSCODES | number ) => {
+
+    const GetStatusCode = (code: keyof typeof STATUSCODES | number) => {
         if (STATUSCODES[code as keyof typeof STATUSCODES]) {
             return STATUSCODES[code as keyof typeof STATUSCODES];
         } else {
@@ -83,7 +93,39 @@ export const CREATESTATUS = (code: keyof typeof STATUSCODES | number, errInt: nu
         code,
         indication,
         message,
-        statusCode : statusCode ? statusCode : GetStatusCode(code),
+        statusCode: statusCode ? statusCode : GetStatusCode(code),
+        timestamp: timestamp ? timestamp : new Date().toISOString(),
+        path: path ? path : '',
+        errors: errors ? errors : []
+    }
+    return status;
+}
+/**
+ * Creates a response status object
+ * @param code  The response code
+ * @param errInt  Code to indicate if the response is an error or not. 0 = success, 1 = failure
+ * @param message  The status message
+ * @param statusCode  The status code e.g. "OK" or "UNAUTHORIZED"
+ * @param timestamp  The timestamp of when the response was created
+ * @param path  The path of the request
+ * @param errors  The errors that occurred
+ */
+
+export function CREATESTATUSV2({ code, errInt, message, statusCode, timestamp, path, errors }: TCreateStatus): TResponseStatus {
+    const indication = errInt === 0 ? 'success' : 'failure';
+
+    const GetStatusCode = (code: keyof typeof STATUSCODES | number) => {
+        if (STATUSCODES[code as keyof typeof STATUSCODES]) {
+            return STATUSCODES[code as keyof typeof STATUSCODES];
+        } else {
+            return 'UNKNOWN_STATUS_CODE';
+        }
+    }
+    const status: TResponseStatus = {
+        code,
+        indication,
+        message,
+        statusCode: statusCode ? statusCode : GetStatusCode(code),
         timestamp: timestamp ? timestamp : new Date().toISOString(),
         path: path ? path : '',
         errors: errors ? errors : []
@@ -96,6 +138,17 @@ export const CREATESTATUS = (code: keyof typeof STATUSCODES | number, errInt: nu
  * @param data  The data to return
  */
 export const CREATERESPONSE = <IResponseData>(status: TResponseStatus, data: IResponseData): IResponseResult<TResponseStatus, IResponseData> => {
+    return {
+        status,
+        data
+    }
+}
+/**
+ * Creates a response object
+ * @param status The status to return
+ * @param data  The data to return
+ */
+export const CREATERESPONSEV2 = <IResponseData>({ status, data }: { status: TResponseStatus, data: IResponseData }): IResponseResult<TResponseStatus, IResponseData> => {
     return {
         status,
         data
