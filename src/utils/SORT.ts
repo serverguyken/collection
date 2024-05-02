@@ -6,7 +6,10 @@
  * @param order 
  * @returns 
  */
-const SORT = <T extends { [key: string]: any }>(arr: T[], key: string, order: 'asc' | 'desc' = 'asc') => {
+type KeysMatching<T, V> = {
+    [K in keyof T]-?: T[K] extends V ? K : never
+  }[keyof T]
+const SORT = <T extends any[], Key extends T[keyof T[number]]>(arr: T, key: keyof Key, order: 'asc' | 'desc' = 'asc') => {
     return arr.sort((a, b) => {
         if (order === 'asc') {
             return a[key] > b[key] ? 1 : -1;
@@ -15,5 +18,15 @@ const SORT = <T extends { [key: string]: any }>(arr: T[], key: string, order: 'a
         }
     });
 }
-
+const arr = [
+    {
+        t: 1,
+        name: ":ee"
+    },
+    {
+        t: 1,
+        name: ":ee",
+        st: ""
+    }
+]
 export default SORT;
