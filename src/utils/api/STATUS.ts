@@ -60,7 +60,7 @@ export const STATUSCODES = {
     511: 'NETWORK_AUTHENTICATION_REQUIRED'
 } as const;
 
-type TCreateStatus = {
+type TCreateStatusS<Code extends keyof typeof STATUSCODES | number, ErrInt extends number, Message extends string, StatusCode extends string, Timestamp extends string, Path extends string, Errors extends TResponseStatus['errors']> = {
     code: keyof typeof STATUSCODES | number,
     errInt: number,
     message: string,
@@ -79,7 +79,7 @@ type TCreateStatus = {
  * @param path  The path of the request
  * @param errors  The errors that occurred
  */
-export function CREATESTATUS(code: keyof typeof STATUSCODES | number, errInt: number, message: string, statusCode?: string, timestamp?: string, path?: string, errors?: TResponseStatus['errors'], options?: TCreateStatus): TResponseStatus {
+export function CREATESTATUS<Code extends keyof typeof STATUSCODES | number, ErrInt extends number, Message extends string, StatusCode extends string, Timestamp extends string, Path extends string, Errors extends TResponseStatus['errors']>(code: Code, errInt: ErrInt, message: Message, statusCode?: StatusCode, timestamp?: Timestamp, path?: Path, errors?: Errors): TResponseStatus {
     const indication = errInt === 0 ? 'success' : 'failure';
 
     const GetStatusCode = (code: keyof typeof STATUSCODES | number) => {
@@ -111,7 +111,7 @@ export function CREATESTATUS(code: keyof typeof STATUSCODES | number, errInt: nu
  * @param errors  The errors that occurred
  */
 
-export function CREATESTATUSV2({ code, errInt, message, statusCode, timestamp, path, errors }: TCreateStatus): TResponseStatus {
+export function CREATESTATUSV2<Code extends keyof typeof STATUSCODES | number, ErrInt extends number, Message extends string, StatusCode extends string, Timestamp extends string, Path extends string, Errors extends TResponseStatus['errors']>({ code, errInt, message, statusCode, timestamp, path, errors }: TCreateStatusS<Code, ErrInt, Message, StatusCode, Timestamp, Path, Errors>): TResponseStatus {
     const indication = errInt === 0 ? 'success' : 'failure';
 
     const GetStatusCode = (code: keyof typeof STATUSCODES | number) => {
