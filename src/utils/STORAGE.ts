@@ -3,16 +3,16 @@ import { REMOVELOCALSTORAGE, REMOVESESSIONSTORAGE, REMOVECOOKIE, SAVECOOKIE, SAV
 
 
 
-export const SAVESTORAGE = (type: "session" | "local" | "cookie", key: string, value: any, expires?: number) => {
+export const SAVESTORAGE = <Key extends string, Value extends any>(type: "session" | "local" | "cookie", key: Key, value: Value, expires?: number) => {
     switch (type) {
         case "session":
-            SAVESESSIONSTORAGE(key, value);
+            SAVESESSIONSTORAGE<Key, Value>(key, value);
         case "local":
-            SAVELOCALSTORAGE(key, value);
+            SAVELOCALSTORAGE<Key, Value>(key, value);
         case "cookie":
-            SAVECOOKIE(key, value, expires || 1);
+            SAVECOOKIE<Key, Value>(key, value, expires || 1);
         default:
-            SAVELOCALSTORAGE(key, value);
+            SAVELOCALSTORAGE<Key, Value>(key, value);
     }
 }
 /**
@@ -23,16 +23,16 @@ export const SAVESTORAGE = (type: "session" | "local" | "cookie", key: string, v
  * @param {string} key - The `key` parameter is a string that represents the key of the item you want
  * to remove from the storage.
  */
-export const REMOVESTORAGE = (type: "session" | "local" | "cookie", key: string) => {   
+export const REMOVESTORAGE = <Key extends string>(type: "session" | "local" | "cookie", key: Key) => {   
     switch (type) {
         case "session":
-            REMOVESESSIONSTORAGE(key);
+            REMOVESESSIONSTORAGE<Key>(key);
         case "local":
-            REMOVELOCALSTORAGE(key);
+            REMOVELOCALSTORAGE<Key>(key);
         case "cookie":
-            REMOVECOOKIE(key);
+            REMOVECOOKIE<Key>(key);
         default:
-            REMOVELOCALSTORAGE(key);
+            REMOVELOCALSTORAGE<Key>(key);
     }
 }
 
@@ -51,12 +51,12 @@ export const REMOVESTORAGE = (type: "session" | "local" | "cookie", key: string)
 export const GETSTORAGE = <Key extends string, Value extends any>(type: "session" | "local" | "cookie", key: Key): Value => {
     switch (type) {
         case "session":
-            return GETSESSIONSTORAGE(key) as Value;
+            return GETSESSIONSTORAGE<Key, Value>(key) as Value;
         case "local":
-            return GETLOCALSTORAGE(key) as Value;
+            return GETLOCALSTORAGE<Key, Value>(key) as Value;
         case "cookie":
-           GETCOOKIE(key);
+           GETCOOKIE<Key, Value>(key);
         default:
-            return GETLOCALSTORAGE(key) as Value;
+            return GETLOCALSTORAGE<Key, Value>(key) as Value;
     }
 }

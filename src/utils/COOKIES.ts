@@ -11,7 +11,7 @@ import ISCLIENT from "./ISCLIENT";
  * 
  * NOTE: Works only on client side
  */
-export const SAVECOOKIE = (name: string, value: any, expires: number) => {
+export const SAVECOOKIE = <Name extends string, Value extends any>(name: Name, value: Value, expires: number) => {
     if (ISCLIENT()) {
         const date = new Date();
         const expiresIn = date.setTime(date.getTime() + (expires));
@@ -26,7 +26,7 @@ export const SAVECOOKIE = (name: string, value: any, expires: number) => {
  * 
  * NOTE: Works only on client side
 */
-export const GETCOOKIE = (name: string) => {
+export const GETCOOKIE = <Name extends string, Value extends any>(name: Name): Value | null => {
     if (ISCLIENT()) {
         const n = name + "=";
         const decodedCookie = decodeURIComponent(document.cookie);
@@ -52,7 +52,7 @@ export const GETCOOKIE = (name: string) => {
  * 
  * NOTE: Works only on client side
 */
-export const REMOVECOOKIE = (name: string) => {
+export const REMOVECOOKIE = <Name extends string>(name: Name) => {
     if (ISCLIENT()) {
         document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 UTC;path=/;";
     }

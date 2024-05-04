@@ -6,7 +6,7 @@ import ISCLIENT from "./ISCLIENT";
  * @param key   key of local storage
  * @param value value of local storage
  */
-export const SAVELOCALSTORAGE = (key: string, value: any) => {
+export const SAVELOCALSTORAGE = <Key extends string, Value extends any>(key: Key, value: Value) => {
     if (ISCLIENT()) {
         localStorage.setItem(key, JSON.stringify(value));
     }
@@ -18,7 +18,7 @@ export const SAVELOCALSTORAGE = (key: string, value: any) => {
  * @param key  key of local storage
  * @param defaultValue  default value of local storage
 */
-export const GETLOCALSTORAGE = (key: string, defaultValue?: any) => {
+export const GETLOCALSTORAGE = <Key extends string, Value extends any>(key: Key, defaultValue?: Value): Value | null => {
     if (ISCLIENT()) {
         const value = localStorage.getItem(key);
         if (value) {
@@ -35,7 +35,7 @@ export const GETLOCALSTORAGE = (key: string, defaultValue?: any) => {
  * Remove data from local storage
  * @param key  key of local storage
 */
-export const REMOVELOCALSTORAGE = (key: string) => {
+export const REMOVELOCALSTORAGE = <Key extends string>(key: Key) => {
     if (ISCLIENT()) {
         localStorage.removeItem(key);
     }
@@ -47,7 +47,7 @@ export const REMOVELOCALSTORAGE = (key: string) => {
  * @param key   key of session storage
  * @param value value of session storage
  */
-export const SAVESESSIONSTORAGE = (key: string, value: any) => {
+export const SAVESESSIONSTORAGE = <Key extends string, Value extends any>(key: Key, value: Value) => {
     if (ISCLIENT()) {
         sessionStorage.setItem(key, JSON.stringify(value));
     }
@@ -58,7 +58,7 @@ export const SAVESESSIONSTORAGE = (key: string, value: any) => {
  * @param key  key of session storage
  * @param defaultValue  default value of session storage
  */
-export const GETSESSIONSTORAGE = (key: string, defaultValue?: any) => {
+export const GETSESSIONSTORAGE = <Key extends string, Value extends any>(key: Key, defaultValue?: Value): Value | null => {
     if (ISCLIENT()) {
         const value = sessionStorage.getItem(key);
         if (value) {
@@ -74,7 +74,7 @@ export const GETSESSIONSTORAGE = (key: string, defaultValue?: any) => {
  * Remove data from session storage
  * @param key  key of session storage
 */
-export const REMOVESESSIONSTORAGE = (key: string) => {
+export const REMOVESESSIONSTORAGE = <Key extends string>(key: Key) => {
     if (ISCLIENT()) {
         sessionStorage.removeItem(key);
     }
