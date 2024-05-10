@@ -32,7 +32,7 @@ import { CAPITALIZEEACHWORD } from "./CAPITALIZE";
  */
 
 export function FORMATSTRINGTOURL(strToFormat: string): string;
-export function FORMATSTRINGTOURL({ strToFormat, regex="space", separator= "-", toLowerCase= true }: IFormatStringToURL): string;
+export function FORMATSTRINGTOURL({ strToFormat, regex, separator, toLowerCase }: IFormatStringToURL): string;
 export function FORMATSTRINGTOURL(props: any): string {
     if (typeof props === "string") {
         const formattedStr = props.replace(/\s/g, "-");
@@ -68,7 +68,7 @@ export function FORMATSTRINGTOURL(props: any): string {
  */
 
 export function UNFORMATSTRINGTOURL(strToFormat: string): string;
-export function UNFORMATSTRINGTOURL({ strToFormat, regex="hyphen", separator= " ", toLowerCase= true, capitalize= true }: IUnformatStringToURL): string;
+export function UNFORMATSTRINGTOURL({ strToFormat, regex, separator, toLowerCase, capitalize }: IUnformatStringToURL): string;
 export function UNFORMATSTRINGTOURL(props: any): string {
     // unformat the string back to normal
     if (typeof props === "string") {

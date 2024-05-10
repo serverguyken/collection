@@ -1,3 +1,4 @@
+import TOSTRING from "./TOSTRING";
 
 /**
  * Validate an email address
@@ -189,17 +190,19 @@ export const URLVALIDATION = (value: string) => {
 /**
  * Number length validation
  */
-export const LENGTHVALIDATION = (value: number | string, max: number, type?: "greater-than" | "less-than") => {
+export const LENGTHVALIDATION = (value: number | string, max: number, type?: "greater-than" | "less-than" | "equal") => {
     if (type) {
         if (type === "greater-than") {
-            return value.toString().length > max;
+            return TOSTRING(value).length > max;
         } else if (type === "less-than") {
-            return value.toString().length < max;
+            return TOSTRING(value).length < max;
+        } else if (type === "equal") {
+            return TOSTRING(value).length === max;
         } else {
             return false;
         }
     } else {
-        if (value.toString().length !== max) {
+        if (TOSTRING(value).length !== max) {
             return false;
         } else {
             return true;
@@ -232,7 +235,7 @@ export interface IVALIDATOR {
         reasons: string[];
     };
     phoneNumber(phoneNumber: string, max: number, countryCode?: string): boolean;
-    length(number: number | string, max: number, type?: "greater-than" | "less-than"): boolean;
+    length(number: number | string, max: number, type?: "greater-than" | "less-than" | "equal"): boolean;
     password(password: string, min: number, max: number, strict: boolean): boolean;
     passwordWithMessage(password: string, min: number, max: number, strict: boolean): {
         valid: boolean;
@@ -359,7 +362,7 @@ class VALIDATOR implements IVALIDATOR {
      * validator.length(123456, 6); // returns true
      * validator.length('123456', 5); // returns false
      */
-    length(value: number | string, max: number, type?: "greater-than" | "less-than") {
+    length(value: number | string, max: number, type?: "greater-than" | "less-than" | "equal") {
         return LENGTHVALIDATION(value, max, type);
     }
 
