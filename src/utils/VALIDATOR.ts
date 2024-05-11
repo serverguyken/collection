@@ -244,7 +244,7 @@ export interface IVALIDATOR {
         reasons: string[];
     };
     phoneNumber(phoneNumber: string, max: number, countryCode?: string): boolean;
-    length(number: number | string, max: number, type?: "greater-than" | "less-than" | "equal"): boolean;
+    length(number: any, max: number, type?: "greater-than" | "less-than" | "equal"): boolean;
     password(password: string, min: number, max: number, strict: boolean): boolean;
     passwordWithMessage(password: string, min: number, max: number, strict: boolean): {
         valid: boolean;
@@ -371,7 +371,7 @@ class VALIDATOR implements IVALIDATOR {
      * validator.length(123456, 6); // returns true
      * validator.length('123456', 5); // returns false
      */
-    length(value: number | string, max: number, type?: "greater-than" | "less-than" | "equal") {
+    length(value: any, max: number, type?: "greater-than" | "less-than" | "equal") {
         return LENGTHVALIDATION(value, max, type);
     }
 
