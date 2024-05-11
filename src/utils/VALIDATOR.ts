@@ -1,3 +1,4 @@
+import HASLENGTH from "./HASLENGTH";
 import TOSTRING from "./TOSTRING";
 
 /**
@@ -190,23 +191,31 @@ export const URLVALIDATION = (value: string) => {
 /**
  * Number length validation
  */
-export const LENGTHVALIDATION = (value: number | string, max: number, type?: "greater-than" | "less-than" | "equal") => {
+export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" | "less-than" | "equal") => {
     if (type) {
         if (type === "greater-than") {
-            return TOSTRING(value).length > max;
+            return HASLENGTH(value).isTrue ? HASLENGTH(value).length > max : TOSTRING(value).length > max;
         } else if (type === "less-than") {
-            return TOSTRING(value).length < max;
+            return HASLENGTH(value).isTrue ? HASLENGTH(value).length < max : TOSTRING(value).length < max;
         } else if (type === "equal") {
-            return TOSTRING(value).length === max;
+            return HASLENGTH(value).isTrue ? HASLENGTH(value).length === max : TOSTRING(value).length === max;
         } else {
             return false;
         }
     } else {
-        if (TOSTRING(value).length !== max) {
-            return false;
-        } else {
+        if (HASLENGTH(value).isTrue) {
+            if (HASLENGTH(value).length !== max) {
+                return false;
+            }
             return true;
+        } else {
+            if (TOSTRING(value).length !== max) {
+                return false;
+            } else {
+                return true;
+            }
         }
+
     }
 
 };
