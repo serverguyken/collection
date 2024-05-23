@@ -9,7 +9,6 @@ const HASLENGTH = (value: any): {
     length: number;
 } => {
     if (value) {
-        const v = 'w'
         const hasLengthProperty = typeof value?.length === 'number'
         if (hasLengthProperty) {
             return {
