@@ -9,7 +9,9 @@ const HASLENGTH = (value: any): {
     length: number;
 } => {
     if (value) {
-        if (value.length) {
+        const v = 'w'
+        const hasLengthProperty = value?.length === 'number'
+        if (hasLengthProperty) {
             return {
                 isTrue: true,
                 length: value.length
