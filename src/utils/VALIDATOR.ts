@@ -192,13 +192,14 @@ export const URLVALIDATION = (value: string) => {
  * Number length validation
  */
 export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" | "less-than" | "equal") => {
+    const valueType = typeof value;
     if (type) {
         if (type === "greater-than") {
-            return HASLENGTH(value).isTrue ? HASLENGTH(value).length > max : TOSTRING(value).length > max;
+            return HASLENGTH(value).isTrue ? HASLENGTH(value).length > max : valueType === "string" ? TOSTRING(value).length > max : value > max;
         } else if (type === "less-than") {
-            return HASLENGTH(value).isTrue ? HASLENGTH(value).length < max : TOSTRING(value).length < max;
+            return HASLENGTH(value).isTrue ? HASLENGTH(value).length < max : valueType === "string" ? TOSTRING(value).length < max : value < max;
         } else if (type === "equal") {
-            return HASLENGTH(value).isTrue ? HASLENGTH(value).length === max : TOSTRING(value).length === max;
+            return HASLENGTH(value).isTrue ? HASLENGTH(value).length === max : valueType === "string" ? TOSTRING(value).length === max : value === max;
         } else {
             return false;
         }
@@ -209,10 +210,12 @@ export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" 
             }
             return true;
         } else {
-            if (TOSTRING(value).length !== max) {
-                return false;
+            if (valueType === "string") {
+                return TOSTRING(value).length === max;
+            } else if (valueType === "number") {
+                return value === max
             } else {
-                return true;
+                return false;
             }
         }
 

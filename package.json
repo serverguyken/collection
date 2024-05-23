@@ -1,6 +1,6 @@
 {
     "name": "@serverguyken/collection",
-    "version": "0.5.0",
+    "version": "0.5.1",
     "description": "A collection of functions, interfaces and types for use in your projects.",
     "main": "dist/index.js",
     "module": "dist/index.js",
