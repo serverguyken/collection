@@ -211,12 +211,13 @@ export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" 
             return true;
         } else {
             if (valueType === "string") {
-                return TOSTRING(value).length === max;
+                return TOSTRING(value).length !== max ? false : true;
             } else if (valueType === "number") {
-                return value === max
+                return value !== max ? false : true;
             } else {
-                return false;
+                return true;
             }
+            
         }
 
     }
