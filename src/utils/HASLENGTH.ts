@@ -10,7 +10,7 @@ const HASLENGTH = (value: any): {
 } => {
     if (value) {
         const v = 'w'
-        const hasLengthProperty = value?.length === 'number'
+        const hasLengthProperty = typeof value?.length === 'number'
         if (hasLengthProperty) {
             return {
                 isTrue: true,
