@@ -234,7 +234,9 @@ export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" 
  */
 export const PLAINTEXTVALIDATION = (input: string, checkForEmpty: boolean = true): boolean => {
     if (checkForEmpty) {
-        return ISSTRINGEMPTY(input)
+        if (ISSTRINGEMPTY(input)) {
+            return true
+        }
     }
     // Regular expression to check for HTML tags and other suspicious characters
     const maliciousPattern = /<[^>]*>|[<>]/g;
@@ -263,7 +265,9 @@ export const PLAINTEXTVALIDATION = (input: string, checkForEmpty: boolean = true
  */
 export const INPUTVALIDATION = (input: string, checkForEmpty: boolean = true): boolean => {
     if (checkForEmpty) {
-        return ISSTRINGEMPTY(input)
+        if (ISSTRINGEMPTY(input)) {
+            return true
+        }
     }
     // Regular expressions for different valid input types
     const plainTextPattern = /^[\w\s.,!?@#%&*()\-+=]+$/;
