@@ -12,7 +12,7 @@ const ISEMPTY = (value: any) => {
     } else if (ISOBJ(value)) {
         return Object.keys(value).length === 0;
     } else {
-        return value === null || value === undefined || value === '' || value === 0 || value === false;
+        return value === null || value === undefined || value?.trim() === '' || value === 0 || value === false;
     }
 }
 
@@ -22,7 +22,7 @@ const ISEMPTY = (value: any) => {
  * @param value  - the value to check
  */
 const ISSTRINGEMPTY = (value: string) => {
-    return value === '';
+    return value.trim() === '';
 }
 
 /**
@@ -31,7 +31,7 @@ const ISSTRINGEMPTY = (value: string) => {
  * @returns 
  */
 const STRICTEMPTY = (value: any) => {
-    return ISEMPTY(value) || value === "null" || value === "undefined"
+    return ISEMPTY(value) || value?.trim() === "null" || value?.trim() === "undefined"
 }
 
 /**

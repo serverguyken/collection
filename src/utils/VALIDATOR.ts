@@ -1,4 +1,5 @@
 import HASLENGTH from "./HASLENGTH";
+import { ISSTRINGEMPTY } from "./ISEMPTY";
 import TOSTRING from "./TOSTRING";
 
 /**
@@ -231,7 +232,10 @@ export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" 
  * @param {string} input - The string to validate.
  * @returns {boolean} - Returns true if the input is valid plain text, otherwise false.
  */
-export const PLAINTEXTVALIDATION = (input: string): boolean => {
+export const PLAINTEXTVALIDATION = (input: string, checkForEmpty: boolean = true): boolean => {
+    if (checkForEmpty) {
+        return ISSTRINGEMPTY(input)
+    }
     // Regular expression to check for HTML tags and other suspicious characters
     const maliciousPattern = /<[^>]*>|[<>]/g;
 
@@ -257,7 +261,10 @@ export const PLAINTEXTVALIDATION = (input: string): boolean => {
  * @param {string} input - The string to validate.
  * @returns {boolean} - Returns true if the input is valid, otherwise false.
  */
-export const INPUTVALIDATION = (input: string): boolean => {
+export const INPUTVALIDATION = (input: string, checkForEmpty: boolean = true): boolean => {
+    if (checkForEmpty) {
+        return ISSTRINGEMPTY(input)
+    }
     // Regular expressions for different valid input types
     const plainTextPattern = /^[\w\s.,!?@#%&*()\-+=]+$/;
     const numberPattern = /^\d+$/;
@@ -317,8 +324,8 @@ export interface IVALIDATOR {
     url(url: string): boolean;
     addCustomValidation(name: string, validation: (value: string) => boolean): void;
     maskEmail(value: string): string;
-    plainText(input: string): boolean;
-    input(input: string): boolean;
+    plainText(input: string, checkForEmpty: boolean): boolean;
+    input(input: string, checkForEmpty: boolean): boolean;
 }
 
 /**
@@ -449,8 +456,8 @@ class VALIDATOR implements IVALIDATOR {
     * validator.plainText(testString1); // returns true
     * validator.plainText(testString2); // returns false
      */
-    plainText(input: string) {
-        return PLAINTEXTVALIDATION(input)
+    plainText(input: string, checkForEmpty: boolean = true) {
+        return PLAINTEXTVALIDATION(input, checkForEmpty)
     }
 
     /**
@@ -463,8 +470,8 @@ class VALIDATOR implements IVALIDATOR {
     * validator.input(testString2); // returns true
     * validator.input("<script>alert('test');</script>"); // returns false
      */
-    input(input: string) {
-        return INPUTVALIDATION(input)
+    input(input: string, checkForEmpty: boolean = true) {
+        return INPUTVALIDATION(input, checkForEmpty)
     }
 
     /**
