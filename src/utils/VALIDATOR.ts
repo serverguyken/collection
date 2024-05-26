@@ -217,13 +217,71 @@ export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" 
             } else {
                 return true;
             }
-            
+
         }
 
     }
 
 };
 
+/**
+ * Validates a plain text string to ensure it contains no HTML tags or malicious content.
+ * Only allows letters, numbers, spaces, and basic punctuation.
+ *
+ * @param {string} input - The string to validate.
+ * @returns {boolean} - Returns true if the input is valid plain text, otherwise false.
+ */
+export const PLAINTEXTVALIDATION = (input: string): boolean => {
+    // Regular expression to check for HTML tags and other suspicious characters
+    const maliciousPattern = /<[^>]*>|[<>]/g;
+
+    // If the input matches the malicious pattern, it's not valid plain text
+    if (maliciousPattern.test(input)) {
+        return false;
+    }
+
+    // Additional check for other potentially harmful characters or patterns
+    // You can extend this with more complex checks if needed
+    const invalidCharsPattern = /[^\w\s.,!?@#%&*()-+=]/g;
+    if (invalidCharsPattern.test(input)) {
+        return false;
+    }
+
+    return true;
+};
+
+/**
+ * Validates an input string to ensure it is a valid input.
+ * Allows valid plain text, email addresses, phone numbers, and URLs.
+ *
+ * @param {string} input - The string to validate.
+ * @returns {boolean} - Returns true if the input is valid, otherwise false.
+ */
+export const INPUTVALIDATION = (input: string): boolean => {
+    // Regular expressions for different valid input types
+    const plainTextPattern = /^[\w\s.,!?@#%&*()\-+=]+$/;
+    const numberPattern = /^\d+$/;
+    const phoneNumberPattern = /^\+?[\d\s\-()]+$/;
+    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
+
+    // Check for HTML tags or other suspicious characters
+    const maliciousPattern = /<[^>]*>|[<>]/g;
+    if (maliciousPattern.test(input)) {
+        return false;
+    }
+
+    // Check against valid patterns
+    if (plainTextPattern.test(input) ||
+        numberPattern.test(input) ||
+        phoneNumberPattern.test(input) ||
+        emailPattern.test(input) ||
+        urlPattern.test(input)) {
+        return true;
+    }
+
+    return false;
+}
 
 /**
  * Mask email
@@ -259,7 +317,10 @@ export interface IVALIDATOR {
     url(url: string): boolean;
     addCustomValidation(name: string, validation: (value: string) => boolean): void;
     maskEmail(value: string): string;
+    plainText(input: string): boolean;
+    input(input: string): boolean;
 }
+
 /**
  * Validates emails, phone numbers, passwords, names, urls, etc
  */
@@ -380,6 +441,33 @@ class VALIDATOR implements IVALIDATOR {
     }
 
     /**
+     * Validates a plain text string
+     *@param {string} input - The string to validate
+     *@example
+    * const testString1 = "Hello, this is a safe string!";
+    * const testString2 = "<script>alert('Malicious code');</script>";
+    * validator.plainText(testString1); // returns true
+    * validator.plainText(testString2); // returns false
+     */
+    plainText(input: string) {
+        return PLAINTEXTVALIDATION(input)
+    }
+
+    /**
+     * Validates an input string 
+     *@param {string} input - The string to validate
+     *@example
+    * const plainText = "Hello, world!";
+    * const phoneNumber = "+1234567890";
+    * validator.input(testString1); // returns true
+    * validator.input(testString2); // returns true
+    * validator.input("<script>alert('test');</script>"); // returns false
+     */
+    input(input: string) {
+        return INPUTVALIDATION(input)
+    }
+
+    /**
      * Adds a custom validation
      * @param name - the name of the custom validation
      * @param validation - the validation function
@@ -436,6 +524,10 @@ class VALIDATOR implements IVALIDATOR {
                     return this.url(args[0]);
                 case "length":
                     return this.length(args[0], args[1]);
+                case "plainText":
+                    return this.plainText(args[0])
+                case "input":
+                    return this.input(args[0])
                 default:
                     throw new Error("The validation does not exist");
             }
@@ -447,3 +539,5 @@ class VALIDATOR implements IVALIDATOR {
 const validator = new VALIDATOR();
 export { VALIDATOR }
 export default validator;
+
+
