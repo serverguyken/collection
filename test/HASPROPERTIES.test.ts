@@ -12,12 +12,12 @@ describe("HASPROPERTIES", () => {
         }
     }
     let obj2: any = null;  
-    let props = ['name', 'age'];
-    let props2 = ['delivery'];
-    let props3 = ['pickup'];
-    let props4 = ['status'];
-    let props5 = ['from'];
-    let props6 = ['tuesday']
+    let props = ['name', 'age'] as Array< keyof typeof obj>;
+    let props2 = ['delivery'] as Array< keyof typeof hours>;
+    let props3 = ['pickup'] as any;
+    let props4 = ['status'] as Array< keyof typeof hours.delivery.monday>;
+    let props5 = ['from'] as Array< keyof typeof hours.delivery.monday>;
+    let props6 = ['tuesday'] as any
     
     it("should return true if the object has the properties", () => {
         expect(HASPROPERTIES(obj, props)).toBe(true);

@@ -238,22 +238,9 @@ export const PLAINTEXTVALIDATION = (input: string, checkForEmpty: boolean = true
             return true
         }
     }
-    // Regular expression to check for HTML tags and other suspicious characters
-    const maliciousPattern = /<[^>]*>|[<>]/g;
-
-    // If the input matches the malicious pattern, it's not valid plain text
-    if (maliciousPattern.test(input)) {
-        return false;
-    }
-
-    // Additional check for other potentially harmful characters or patterns
-    // You can extend this with more complex checks if needed
-    const invalidCharsPattern = /[^\w\s.,!?@#%&*()-+=]/g;
-    if (invalidCharsPattern.test(input)) {
-        return false;
-    }
-
-    return true;
+    // Reject HTML tags or script tags
+    const maliciousPattern = /<\/?[a-z][\s\S]*>/i;
+    return !maliciousPattern.test(input);
 };
 
 /**
@@ -269,29 +256,9 @@ export const INPUTVALIDATION = (input: string, checkForEmpty: boolean = true): b
             return true
         }
     }
-    // Regular expressions for different valid input types
-    const plainTextPattern = /^[\w\s.,!?@#%&*()\-+=]+$/;
-    const numberPattern = /^\d+$/;
-    const phoneNumberPattern = /^\+?[\d\s\-()]+$/;
-    const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-    const urlPattern = /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([\/\w .-]*)*\/?$/;
-
-    // Check for HTML tags or other suspicious characters
-    const maliciousPattern = /<[^>]*>|[<>]/g;
-    if (maliciousPattern.test(input)) {
-        return false;
-    }
-
-    // Check against valid patterns
-    if (plainTextPattern.test(input) ||
-        numberPattern.test(input) ||
-        phoneNumberPattern.test(input) ||
-        emailPattern.test(input) ||
-        urlPattern.test(input)) {
-        return true;
-    }
-
-    return false;
+     // Reject HTML tags or script tags
+     const maliciousPattern = /<\/?[a-z][\s\S]*>/i;
+     return !maliciousPattern.test(input);
 }
 
 /**
