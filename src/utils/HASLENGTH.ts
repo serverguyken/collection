@@ -10,6 +10,12 @@ const HASLENGTH = (value: any): {
 } => {
     if (value) {
         const hasLengthProperty = typeof value?.length === 'number'
+        if (typeof value === "number") {
+            return {
+                isTrue: true,
+                length: value.toString().length
+            }
+        }
         if (hasLengthProperty) {
             return {
                 isTrue: true,

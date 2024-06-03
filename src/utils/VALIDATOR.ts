@@ -1,5 +1,6 @@
 import HASLENGTH from "./HASLENGTH";
 import { ISSTRINGEMPTY } from "./ISEMPTY";
+import LOG from "./LOG";
 import TOSTRING from "./TOSTRING";
 
 /**
@@ -104,8 +105,17 @@ export const PASSWORDVALIDATION = (value: string, min: number, max: number, stri
 
 export const PASSWORDVALIDATIONWITHMESSAGE = (value: string, min: number, max: number, strict: boolean = false) => {
     const valid = PASSWORDVALIDATION(value, min, max, strict);
+    const hasNumOfChars = LENGTHVALIDATION(value, min, "greater-than-equal")
     if (strict) {
-        if (!valid) {
+        if (hasNumOfChars && !valid) {
+           return {
+                valid: false,
+                message: "Invalid character",
+                title: "Password contains an invalid character",
+                reasons: [""]
+            }
+        }
+        else if (!valid) {
             return {
                 valid: false,
                 message: "Invalid password",
@@ -121,7 +131,15 @@ export const PASSWORDVALIDATIONWITHMESSAGE = (value: string, min: number, max: n
             }
         }
     } else {
-        if (!valid) {
+        if (hasNumOfChars && !valid) {
+            return {
+                valid: false,
+                message: "Invalid character",
+                title: "Password contains an invalid character",
+                reasons: [""]
+            }
+        }
+        else if (!valid) {
             return {
                 valid: false,
                 message: "Invalid password",
@@ -192,7 +210,7 @@ export const URLVALIDATION = (value: string) => {
 /**
  * Number length validation
  */
-export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" | "less-than" | "equal") => {
+export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" | "less-than" | "equal" | "greater-than-equal") => {
     const valueType = typeof value;
     if (type) {
         if (type === "greater-than") {
@@ -201,6 +219,8 @@ export const LENGTHVALIDATION = (value: any, max: number, type?: "greater-than" 
             return HASLENGTH(value).isTrue ? HASLENGTH(value).length < max : valueType === "string" ? TOSTRING(value).length < max : value < max;
         } else if (type === "equal") {
             return HASLENGTH(value).isTrue ? HASLENGTH(value).length === max : valueType === "string" ? TOSTRING(value).length === max : value === max;
+        } else if (type === "greater-than-equal") {
+            return HASLENGTH(value).isTrue ? HASLENGTH(value).length >= max : valueType === "string" ? TOSTRING(value).length >= max : value >= max;
         } else {
             return false;
         }
@@ -275,7 +295,7 @@ export const INPUTVALIDATION = (input: string, checkForEmpty: boolean = true): b
     // );
 
     const maliciousPattern = /<\/?[a-z][\s\S]*>/i;
-     return !maliciousPattern.test(input);
+    return !maliciousPattern.test(input);
 }
 
 /**
