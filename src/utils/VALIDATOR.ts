@@ -94,7 +94,7 @@ export const PASSWORDVALIDATION = (value: string, min: number, max: number, stri
     if (strict) {
         return STRICTPASSWORDVALIDATION(value, min, max);
     } else {
-        const passwordRegex = new RegExp(`^[a-zA-Z0-9!@#$%^&*]{${min},${max}}$`);
+        const passwordRegex = new RegExp(`^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)(?=.*[!-@#$%^&*])[a-zA-Z0-9!-@#$%^&*]{${min},${max}}$`);
         if (!passwordRegex.test(value)) {
             return false;
         }
@@ -256,8 +256,25 @@ export const INPUTVALIDATION = (input: string, checkForEmpty: boolean = true): b
             return true
         }
     }
-     // Reject HTML tags or script tags
-     const maliciousPattern = /<\/?[a-z][\s\S]*>/i;
+    // const plainTextPattern = /^[a-zA-Z0-9\s.,'!?-]+$/;
+    // const numberPattern = /^[0-9]+$/;
+    // const phonePattern = /^\+?[1-9]\d{1,14}$/; // E.164 format
+    // const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    // const urlPattern = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/i;
+
+    // // Reject HTML tags or script tags
+    // const maliciousPattern = /<\/?[a-z][\s\S]*>/i;
+
+    // return (
+    //     !maliciousPattern.test(input) &&
+    //     (plainTextPattern.test(input) ||
+    //     numberPattern.test(input) ||
+    //     phonePattern.test(input) ||
+    //     emailPattern.test(input) ||
+    //     urlPattern.test(input))
+    // );
+
+    const maliciousPattern = /<\/?[a-z][\s\S]*>/i;
      return !maliciousPattern.test(input);
 }
 
